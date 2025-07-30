@@ -1,4 +1,4 @@
-"use strict";
+/*"use strict";
 const images = [
   {
     preview:
@@ -112,3 +112,33 @@ document.addEventListener("click", (event) => {
   instance = basicLightbox.create(html);
   instance.show();
 }); 
+*/
+
+const galleryContainer = document.querySelector('.gallery');
+
+galleryContainer.addEventListener('click', function (event) {
+  event.preventDefault(); // Bağlantı davranışını engelle
+
+  // Sadece img.gallery-image öğesine tıklanırsa devam et
+  const clickedImage = event.target;
+  if (!clickedImage.classList.contains('gallery-image')) return;
+
+  const largeImageURL = clickedImage.dataset.source;
+
+  // Modal'ı aç
+  const instance = basicLightbox.create(`
+    <img src="${largeImageURL}" width="800" height="600">
+  `);
+
+  instance.show();
+
+  // Escape tuşuyla kapatma
+  const onEsc = (e) => {
+    if (e.key === 'Escape') {
+      instance.close();
+      window.removeEventListener('keydown', onEsc);
+    }
+  };
+
+  window.addEventListener('keydown', onEsc);
+});
